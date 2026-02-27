@@ -7,22 +7,18 @@ import TaskCard from './TaskCard.vue'
 const tasksStore = useTasksStore()
 const draggedOverColumn = ref<TaskStatus | null>(null)
 
-const columns: { status: TaskStatus; title: string }[] = [
-  { status: 'to-do', title: 'To Do' },
-  { status: 'in-progress', title: 'In Progress' },
-  { status: 'done', title: 'Done' }
+const columns: { status: TaskStatus; title: string; color: string }[] = [
+  { status: 'to-do',       title: 'To Do',       color: 'var(--white)' },
+  { status: 'in-progress', title: 'In Progress',  color: 'var(--brand-yellow)' },
+  { status: 'done',        title: 'Done',         color: 'var(--brand-purple)' }
 ]
 
 const getTasksForStatus = (status: TaskStatus) => {
   switch (status) {
-    case 'to-do':
-      return tasksStore.todoTasks
-    case 'in-progress':
-      return tasksStore.inProgressTasks
-    case 'done':
-      return tasksStore.doneTasks
-    default:
-      return []
+    case 'to-do':        return tasksStore.todoTasks
+    case 'in-progress':  return tasksStore.inProgressTasks
+    case 'done':         return tasksStore.doneTasks
+    default:             return []
   }
 }
 
@@ -49,25 +45,15 @@ const handleDrop = (targetStatus: TaskStatus, e: DragEvent) => {
   e.preventDefault()
   const taskId = e.dataTransfer!.getData('taskId')
   const sourceStatus = e.dataTransfer!.getData('sourceStatus')
-
   draggedOverColumn.value = null
-
   if (sourceStatus !== targetStatus) {
     tasksStore.updateTaskStatus(taskId, targetStatus)
   }
 }
 
-const handleDelete = (taskId: string) => {
-  tasksStore.deleteTask(taskId)
-}
-
-const handleUpdate = (taskId: string, updates: any) => {
-  tasksStore.updateTask(taskId, updates)
-}
-
-const handleToggleComplete = (taskId: string, completed: boolean) => {
-  tasksStore.toggleTaskComplete(taskId, completed)
-}
+const handleDelete = (taskId: string) => tasksStore.deleteTask(taskId)
+const handleUpdate = (taskId: string, updates: any) => tasksStore.updateTask(taskId, updates)
+const handleToggleComplete = (taskId: string, completed: boolean) => tasksStore.toggleTaskComplete(taskId, completed)
 </script>
 
 <template>
@@ -77,6 +63,7 @@ const handleToggleComplete = (taskId: string, completed: boolean) => {
       :key="column.status"
       class="kanban-column"
       :class="{ 'drag-over': draggedOverColumn === column.status }"
+      :style="{ background: column.color }"
       @drop="handleDrop(column.status, $event)"
       @dragover="handleDragOver"
       @dragenter="handleDragEnter(column.status)"
@@ -98,11 +85,7 @@ const handleToggleComplete = (taskId: string, completed: boolean) => {
         />
 
         <div v-if="getTasksForStatus(column.status).length === 0" class="empty-state">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <rect x="3" y="3" width="18" height="18" rx="2"/>
-            <path d="M9 11l3 3L22 4"/>
-          </svg>
-          <p>No tasks</p>
+          <p>Drop tasks here</p>
         </div>
       </div>
     </div>
@@ -114,48 +97,48 @@ const handleToggleComplete = (taskId: string, completed: boolean) => {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: var(--spacing-lg);
-  height: calc(100vh - 280px);
-  min-height: 400px;
+  align-items: start;
 }
 
 .kanban-column {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
+  border: var(--border-thick);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  transition: all var(--transition-normal);
+  transition: box-shadow var(--transition-fast);
+  min-height: 300px;
 }
 
 .kanban-column.drag-over {
-  border-color: var(--accent-blue);
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+  box-shadow: 10px 10px 0px var(--black);
+  transform: translate(-2px, -2px);
 }
 
 .column-header {
-  padding: var(--spacing-md);
-  border-bottom: 1px solid var(--border-color);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-bottom: var(--border);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: var(--bg-primary);
 }
 
 .column-title {
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  color: var(--black);
 }
 
 .task-count {
-  background: var(--bg-surface-hover);
-  color: var(--text-secondary);
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border-radius: 12px;
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--font-body);
   font-size: 0.75rem;
-  font-weight: 500;
-  min-width: 24px;
+  font-weight: 900;
+  padding: 2px 10px;
+  border-radius: 999px;
+  min-width: 28px;
   text-align: center;
 }
 
@@ -166,65 +149,51 @@ const handleToggleComplete = (taskId: string, completed: boolean) => {
   flex-direction: column;
   gap: var(--spacing-md);
   overflow-y: auto;
-  overflow-x: hidden;
+  max-height: calc(100vh - 380px);
+  min-height: 200px;
 }
 
 .column-content::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 .column-content::-webkit-scrollbar-track {
-  background: var(--bg-surface);
+  background: transparent;
 }
 
 .column-content::-webkit-scrollbar-thumb {
-  background: var(--border-color);
+  background: rgba(0, 0, 0, 0.3);
   border-radius: 4px;
 }
 
-.column-content::-webkit-scrollbar-thumb:hover {
-  background: var(--bg-surface-hover);
-}
-
 .empty-state {
+  flex: 1;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: var(--spacing-xl);
-  color: var(--text-tertiary);
-  text-align: center;
-  flex: 1;
-}
-
-.empty-state svg {
-  opacity: 0.3;
-  margin-bottom: var(--spacing-md);
-}
-
-.empty-state p {
+  border: 3px dashed rgba(0, 0, 0, 0.25);
+  border-radius: var(--radius-md);
+  color: rgba(0, 0, 0, 0.4);
+  font-weight: 700;
   font-size: 0.875rem;
+  letter-spacing: 0.05em;
 }
 
-/* Responsive Design */
+/* Responsive */
 @media (max-width: 1024px) {
   .kanban-board {
     grid-template-columns: 1fr;
-    height: auto;
   }
 
-  .kanban-column {
-    min-height: 300px;
+  .column-content {
+    max-height: none;
   }
 }
 
 @media (max-width: 640px) {
-  .column-content {
-    padding: var(--spacing-sm);
-  }
-
   .column-header {
-    padding: var(--spacing-sm) var(--spacing-md);
+    padding: var(--spacing-md);
   }
 }
 </style>

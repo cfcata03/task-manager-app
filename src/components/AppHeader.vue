@@ -11,19 +11,13 @@ const userPhoto = computed(() => authStore.user?.photoURL)
 <template>
   <header>
     <div class="header-content">
-      <div class="logo-section">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M9 11l3 3L22 4"/>
-          <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
-        </svg>
-        <h1>Task Manager</h1>
-      </div>
+      <h1 class="logo">Task<span class="logo-accent">Manager</span></h1>
 
       <div class="user-section">
         <img v-if="userPhoto" :src="userPhoto" :alt="userName" class="avatar" />
         <span class="user-name">{{ userName }}</span>
         <button @click="authStore.signOut" class="sign-out">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
             <polyline points="16 17 21 12 16 7"/>
             <line x1="21" y1="12" x2="9" y2="12"/>
@@ -37,34 +31,29 @@ const userPhoto = computed(() => authStore.user?.photoURL)
 
 <style scoped>
 header {
-  background: var(--bg-surface);
-  border-bottom: 1px solid var(--border-color);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  box-shadow: var(--shadow-card);
+  background: var(--bg-primary);
+  border-bottom: var(--border-thick);
 }
 
 .header-content {
   max-width: 1400px;
   margin: 0 auto;
-  padding: var(--spacing-md) var(--spacing-lg);
+  padding: var(--spacing-md) var(--spacing-xl);
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.logo-section {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
-  color: var(--accent-blue);
+.logo {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  color: var(--black);
+  letter-spacing: -0.02em;
 }
 
-h1 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--text-primary);
+.logo-accent {
+  color: var(--accent-orange);
+  margin-left: 0.2em;
 }
 
 .user-section {
@@ -77,13 +66,14 @@ h1 {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  border: 2px solid var(--border-color);
+  border: var(--border);
+  box-shadow: 2px 2px 0px var(--black);
 }
 
 .user-name {
   font-size: 0.875rem;
+  font-weight: 600;
   color: var(--text-secondary);
-  font-weight: 500;
 }
 
 .sign-out {
@@ -91,22 +81,34 @@ h1 {
   align-items: center;
   gap: var(--spacing-sm);
   padding: var(--spacing-sm) var(--spacing-md);
-  background: transparent;
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  font-size: 0.8125rem;
-  color: var(--text-secondary);
+  background: var(--white);
+  border: var(--border);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--black);
   cursor: pointer;
+  box-shadow: var(--shadow);
   transition: all var(--transition-fast);
 }
 
 .sign-out:hover {
-  border-color: var(--danger);
-  color: var(--danger);
-  background: rgba(239, 68, 68, 0.05);
+  background: var(--accent-orange);
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px var(--black);
+}
+
+.sign-out:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px var(--black);
 }
 
 @media (max-width: 768px) {
+  .header-content {
+    padding: var(--spacing-md);
+  }
+
   .user-name {
     display: none;
   }
@@ -119,19 +121,8 @@ h1 {
     padding: var(--spacing-sm);
   }
 
-  h1 {
-    font-size: 1.125rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .logo-section svg {
-    width: 24px;
-    height: 24px;
-  }
-
-  h1 {
-    font-size: 1rem;
+  .logo {
+    font-size: 1.5rem;
   }
 }
 </style>

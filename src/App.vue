@@ -55,31 +55,30 @@ watch(isAuthenticated, handleAuthChange, { immediate: true })
 
 <style>
 :root {
-  /* Backgrounds */
-  --bg-primary: #0a0a0a;
-  --bg-surface: #1a1a1a;
-  --bg-surface-hover: #252525;
-  --border-color: #2a2a2a;
+  /* Portfolio Brand Colors */
+  --bg-primary: #eedfd0;
+  --bg-surface: #ffffff;
+  --brand-purple: #D0B4F4;
+  --brand-yellow: #FFC52F;
+  --accent-orange: #FF612F;
+  --brand-purple-dark: rgb(196, 118, 166);
+  --black: #000000;
+  --white: #ffffff;
 
-  /* Text - Adjusted for better contrast */
-  --text-primary: #ffffff;
-  --text-secondary: #a0a0a0;
-  --text-tertiary: #707070;
+  /* Text */
+  --text-primary: #000000;
+  --text-secondary: #333333;
 
-  /* Accent Colors */
-  --accent-blue: #3b82f6;
-  --success: #10b981;
-  --warning: #f59e0b;
-  --danger: #ef4444;
+  /* Neo-brutalist borders & shadows */
+  --border: 3px solid #000000;
+  --border-thick: 8px solid #000000;
+  --shadow: 4px 4px 0px #000000;
+  --shadow-lg: 8px 8px 0px #000000;
 
-  /* Priority Colors (slightly desaturated) */
-  --priority-high: #ff6b6b;
-  --priority-medium: #ffd93d;
-  --priority-low: #6bcf7f;
-
-  /* Shadows - Enhanced for dark theme */
-  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.05);
-  --shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  /* Priority */
+  --priority-high: #FF612F;
+  --priority-medium: #FFC52F;
+  --priority-low: #D0B4F4;
 
   /* Spacing */
   --spacing-xs: 0.25rem;
@@ -89,13 +88,17 @@ watch(isAuthenticated, handleAuthChange, { immediate: true })
   --spacing-xl: 2rem;
 
   /* Borders */
-  --radius-sm: 6px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1.5rem;
 
   /* Transitions */
   --transition-fast: 0.15s ease;
   --transition-normal: 0.2s ease;
+
+  /* Fonts */
+  --font-body: 'Archivo', sans-serif;
+  --font-display: 'Dela Gothic One', cursive;
 }
 
 * {
@@ -105,13 +108,12 @@ watch(isAuthenticated, handleAuthChange, { immediate: true })
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-family: var(--font-body);
   background: var(--bg-primary);
   min-height: 100vh;
   color: var(--text-primary);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 #app {
@@ -119,7 +121,7 @@ body {
 }
 
 *:focus-visible {
-  outline: 2px solid var(--accent-blue);
+  outline: 3px solid var(--black);
   outline-offset: 2px;
 }
 
@@ -130,21 +132,22 @@ body {
   justify-content: center;
   min-height: 100vh;
   background: var(--bg-primary);
-}
-
-.spinner {
-  width: 40px;
-  height: 40px;
-  border: 3px solid #2a2a2a;
-  border-top-color: var(--accent-blue);
-  border-radius: 50%;
-  animation: spin 0.6s linear infinite;
+  gap: var(--spacing-md);
 }
 
 .loading-container p {
-  margin-top: var(--spacing-md);
-  color: var(--text-secondary);
-  font-size: 0.875rem;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--text-primary);
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid var(--black);
+  border-top-color: var(--brand-purple);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
 }
 
 @keyframes spin {
@@ -159,13 +162,13 @@ body {
 .main-content {
   max-width: 1400px;
   margin: 0 auto;
-  padding: var(--spacing-xl) var(--spacing-md);
+  padding: var(--spacing-xl) var(--spacing-xl);
 }
 
 .container {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-lg);
+  gap: var(--spacing-xl);
 }
 
 @media (max-width: 768px) {

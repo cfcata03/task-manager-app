@@ -16,7 +16,7 @@ const handleSubmit = async () => {
     description: description.value.trim(),
     completed: false,
     priority: priority.value,
-    status: 'to-do'  // Default to 'to-do' status
+    status: 'to-do'
   })
 
   title.value = ''
@@ -27,154 +27,164 @@ const handleSubmit = async () => {
 
 <template>
   <form @submit.prevent="handleSubmit" class="task-form">
-    <div class="form-content">
+    <h2 class="form-title">Add a Task</h2>
+
+    <div class="form-fields">
       <input
         v-model="title"
         type="text"
-        placeholder="Add a new task..."
+        placeholder="What needs to be done?"
         required
         class="task-input"
-        autofocus
       />
 
-      <textarea
+      <input
         v-model="description"
+        type="text"
         placeholder="Description (optional)"
-        rows="2"
-        class="description-input"
+        class="task-input"
       />
+    </div>
 
-      <div class="form-footer">
-        <select v-model="priority" class="priority-select">
-          <option value="low">🟢 Low Priority</option>
-          <option value="medium">🟡 Medium Priority</option>
-          <option value="high">🔴 High Priority</option>
-        </select>
-
-        <button type="submit" :disabled="!title.trim()" class="add-btn">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="12" y1="5" x2="12" y2="19"/>
-            <line x1="5" y1="12" x2="19" y2="12"/>
-          </svg>
-          Add Task
-        </button>
+    <div class="form-footer">
+      <div class="priority-group">
+        <button
+          type="button"
+          @click="priority = 'low'"
+          class="priority-btn"
+          :class="{ active: priority === 'low' }"
+          style="--btn-color: var(--priority-low)"
+        >Low</button>
+        <button
+          type="button"
+          @click="priority = 'medium'"
+          class="priority-btn"
+          :class="{ active: priority === 'medium' }"
+          style="--btn-color: var(--priority-medium)"
+        >Medium</button>
+        <button
+          type="button"
+          @click="priority = 'high'"
+          class="priority-btn"
+          :class="{ active: priority === 'high' }"
+          style="--btn-color: var(--priority-high)"
+        >High</button>
       </div>
+
+      <button type="submit" :disabled="!title.trim()" class="add-btn">
+        + Add Task
+      </button>
     </div>
   </form>
 </template>
 
 <style scoped>
 .task-form {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  padding: var(--spacing-lg);
-  box-shadow: var(--shadow-card);
+  background: var(--white);
+  border: var(--border-thick);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  box-shadow: var(--shadow-lg);
 }
 
-.form-content {
+.form-title {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--black);
+  margin-bottom: var(--spacing-lg);
+}
+
+.form-fields {
   display: flex;
-  flex-direction: column;
   gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
 }
 
 .task-input {
-  width: 100%;
+  flex: 1;
   padding: var(--spacing-md);
   background: var(--bg-primary);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
+  border: var(--border);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
   font-size: 0.9375rem;
-  color: var(--text-primary);
-  font-family: inherit;
+  font-weight: 600;
+  color: var(--black);
   transition: all var(--transition-fast);
+  box-shadow: var(--shadow);
 }
 
 .task-input::placeholder {
-  color: var(--text-tertiary);
+  color: #888;
+  font-weight: 400;
 }
 
 .task-input:focus {
   outline: none;
-  border-color: var(--accent-blue);
-  background: var(--bg-surface-hover);
-}
-
-.description-input {
-  width: 100%;
-  padding: var(--spacing-md);
-  background: var(--bg-primary);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  font-size: 0.875rem;
-  color: var(--text-primary);
-  font-family: inherit;
-  resize: vertical;
-  min-height: 60px;
-  transition: all var(--transition-fast);
-}
-
-.description-input::placeholder {
-  color: var(--text-tertiary);
-}
-
-.description-input:focus {
-  outline: none;
-  border-color: var(--accent-blue);
-  background: var(--bg-surface-hover);
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px var(--black);
 }
 
 .form-footer {
   display: flex;
-  gap: var(--spacing-md);
   align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
 }
 
-.priority-select {
-  padding: var(--spacing-md);
+.priority-group {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.priority-btn {
+  padding: var(--spacing-sm) var(--spacing-md);
   background: var(--bg-primary);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
+  border: var(--border);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
   font-size: 0.875rem;
-  color: var(--text-primary);
+  font-weight: 700;
+  color: var(--black);
   cursor: pointer;
-  font-family: inherit;
+  box-shadow: 2px 2px 0px var(--black);
   transition: all var(--transition-fast);
-  flex: 1;
 }
 
-.priority-select:focus {
-  outline: none;
-  border-color: var(--accent-blue);
+.priority-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px var(--black);
 }
 
-.priority-select:hover {
-  background: var(--bg-surface-hover);
+.priority-btn.active {
+  background: var(--btn-color);
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0px var(--black);
 }
 
 .add-btn {
-  padding: var(--spacing-md) var(--spacing-lg);
-  background: var(--accent-blue);
-  color: white;
-  border: none;
-  border-radius: var(--radius-sm);
-  font-size: 0.9375rem;
-  font-weight: 500;
+  padding: var(--spacing-md) var(--spacing-xl);
+  background: var(--brand-yellow);
+  border: var(--border-thick);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 900;
+  color: var(--black);
   cursor: pointer;
+  box-shadow: var(--shadow);
   transition: all var(--transition-fast);
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
   white-space: nowrap;
 }
 
 .add-btn:hover:not(:disabled) {
-  background: #2563eb;
-  transform: translateY(-1px);
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px var(--black);
 }
 
 .add-btn:active:not(:disabled) {
-  transform: translateY(0);
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px var(--black);
 }
 
 .add-btn:disabled {
@@ -183,14 +193,17 @@ const handleSubmit = async () => {
 }
 
 @media (max-width: 768px) {
-  .form-footer {
+  .form-fields {
     flex-direction: column;
   }
 
-  .priority-select,
+  .form-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
   .add-btn {
-    width: 100%;
-    justify-content: center;
+    text-align: center;
   }
 }
 </style>

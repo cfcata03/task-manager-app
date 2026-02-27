@@ -6,16 +6,13 @@ const authStore = useAuthStore()
 
 <template>
   <div class="login-page">
-    <div class="login-box">
-      <div class="logo">
-        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M9 11l3 3L22 4"/>
-          <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
-        </svg>
-      </div>
+    <div class="deco deco-purple"></div>
+    <div class="deco deco-yellow"></div>
+    <div class="deco deco-orange"></div>
 
-      <h1>Task Manager</h1>
-      <p>Organize your work with a simple kanban board</p>
+    <div class="login-box">
+      <h1 class="title">Task<br>Manager</h1>
+      <p class="subtitle">Organize your work with a kanban board</p>
 
       <button @click="authStore.signInWithGoogle" class="google-btn" :disabled="authStore.loading">
         <svg class="google-icon" viewBox="0 0 24 24">
@@ -31,10 +28,6 @@ const authStore = useAuthStore()
       <div v-if="authStore.error" class="error">
         {{ authStore.error }}
       </div>
-
-      <p class="footer-text">
-        Your tasks are securely stored and synced across devices
-      </p>
     </div>
   </div>
 </template>
@@ -45,48 +38,74 @@ const authStore = useAuthStore()
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg,
-    rgba(59, 130, 246, 0.1) 0%,
-    rgba(10, 10, 10, 1) 100%
-  ), var(--bg-primary);
+  background: var(--bg-primary);
   padding: var(--spacing-xl);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Decorative boxes like the portfolio */
+.deco {
+  position: absolute;
+  border: 4px solid var(--black);
+}
+
+.deco-purple {
+  width: 160px;
+  height: 160px;
+  background: var(--brand-purple);
+  top: 8%;
+  right: 10%;
+  transform: rotate(12deg);
+  box-shadow: var(--shadow-lg);
+}
+
+.deco-yellow {
+  width: 120px;
+  height: 120px;
+  background: var(--brand-yellow);
+  bottom: 12%;
+  left: 8%;
+  transform: rotate(-8deg);
+  box-shadow: var(--shadow-lg);
+}
+
+.deco-orange {
+  width: 90px;
+  height: 90px;
+  background: var(--accent-orange);
+  top: 60%;
+  right: 6%;
+  transform: rotate(5deg);
+  box-shadow: var(--shadow);
 }
 
 .login-box {
-  max-width: 400px;
+  max-width: 440px;
   width: 100%;
-  text-align: center;
-  background: var(--bg-surface);
-  padding: var(--spacing-xl);
+  background: var(--white);
+  border: var(--border-thick);
   border-radius: var(--radius-lg);
-  border: 1px solid var(--border-color);
-  box-shadow: var(--shadow-card-hover);
+  box-shadow: var(--shadow-lg);
+  padding: var(--spacing-xl);
+  text-align: center;
+  position: relative;
+  z-index: 1;
 }
 
-.logo {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 80px;
-  height: 80px;
-  background: linear-gradient(135deg, var(--accent-blue), #2563eb);
-  border-radius: 20px;
-  margin-bottom: var(--spacing-lg);
-  color: white;
+.title {
+  font-family: var(--font-display);
+  font-size: 3.5rem;
+  line-height: 1;
+  color: var(--black);
+  margin-bottom: var(--spacing-md);
 }
 
-h1 {
-  font-size: 2rem;
+.subtitle {
+  font-size: 1rem;
   font-weight: 600;
-  margin-bottom: var(--spacing-sm);
-  color: var(--text-primary);
-}
-
-p {
   color: var(--text-secondary);
   margin-bottom: var(--spacing-xl);
-  font-size: 0.9375rem;
-  line-height: 1.5;
 }
 
 .google-btn {
@@ -96,25 +115,26 @@ p {
   justify-content: center;
   gap: var(--spacing-md);
   padding: var(--spacing-md) var(--spacing-lg);
-  background: var(--bg-primary);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  font-size: 0.9375rem;
-  font-weight: 500;
-  color: var(--text-primary);
+  background: var(--brand-yellow);
+  border: var(--border-thick);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 900;
+  color: var(--black);
   cursor: pointer;
-  transition: all var(--transition-normal);
+  box-shadow: var(--shadow);
+  transition: all var(--transition-fast);
 }
 
 .google-btn:hover:not(:disabled) {
-  border-color: var(--accent-blue);
-  background: var(--bg-surface-hover);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-card-hover);
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px var(--black);
 }
 
 .google-btn:active:not(:disabled) {
-  transform: translateY(0);
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px var(--black);
 }
 
 .google-btn:disabled {
@@ -123,45 +143,43 @@ p {
 }
 
 .google-icon {
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   flex-shrink: 0;
 }
 
 .error {
   margin-top: var(--spacing-md);
   padding: var(--spacing-md);
-  background: rgba(239, 68, 68, 0.1);
-  color: var(--danger);
-  border: 1px solid rgba(239, 68, 68, 0.2);
+  background: var(--accent-orange);
+  border: var(--border);
   border-radius: var(--radius-sm);
   font-size: 0.875rem;
-}
-
-.footer-text {
-  margin-top: var(--spacing-xl);
-  margin-bottom: 0;
-  font-size: 0.8125rem;
-  color: var(--text-tertiary);
+  font-weight: 600;
+  box-shadow: var(--shadow);
 }
 
 @media (max-width: 480px) {
+  .title {
+    font-size: 2.5rem;
+  }
+
   .login-box {
     padding: var(--spacing-lg);
   }
 
-  h1 {
-    font-size: 1.75rem;
+  .deco-purple {
+    width: 100px;
+    height: 100px;
   }
 
-  .logo {
-    width: 64px;
-    height: 64px;
+  .deco-yellow {
+    width: 80px;
+    height: 80px;
   }
 
-  .logo svg {
-    width: 48px;
-    height: 48px;
+  .deco-orange {
+    display: none;
   }
 }
 </style>
